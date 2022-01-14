@@ -42,7 +42,7 @@ sf::Uint8* getImg(int xres, int yres) {
 }
 
 /*
-// Allison example
+// Secondary (Allison) example
 // Construct materials
 Material graymat(Color(41. / 255, 239. / 255, 41. / 255), Color(0), 20, Color(.2));
 Material mat1(Color(157. / 255, 38. / 255, 236. / 255), Color(0), 20, Color(.3));
