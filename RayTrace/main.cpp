@@ -20,9 +20,6 @@ int main() {
     if (useclk) {
         t = clock();
     }
-    arma::mat A(4, 5, arma::fill::randu);
-    arma::mat B(4, 5, arma::fill::randu);
-    std::cout << A * B.t() << std::endl;
 
     // Get array of pixels based on what is selected
     sf::Uint8* px;
