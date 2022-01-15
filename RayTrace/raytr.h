@@ -3,91 +3,7 @@
 #define RAYTR_H
 
 #include <SFML/Graphics.hpp>
-
-struct Color {
-public:
-	double r;
-	double g;
-	double b;
-	/*
-	* Constructs the RGB color.
-	* Parameters:
-	*	r: the red part, can range from 0 to 1
-	*	g: the green part, can range from 0 to 1
-	*	b: the blue part, can range from 0 to 1
-	*/
-	Color(double r, double g, double b);
-
-	/*
-	* Constructs a black/gray/white RGB color
-	* Parameters:
-	*	v: the brightness, from 0 to 1
-	*/
-	Color(double v);
-
-	// Constructs a null color
-	Color();
-
-	// Adds Color c's RGB values to the parent's RGB values
-	Color operator+(Color c);
-
-	// Multiplies Color c's RGB values with the parent's RGB values
-	Color operator*(Color c);
-
-	// Divides the parent's RGB values with double d
-	Color operator/(double d);
-};
-
-struct Position {
-public:
-	double x;
-	double y;
-	double z;
-	/*
-	* Constructs a 3D position.
-	* Parameters:
-	*	x: a double representing the x-coordinate
-	* 	y: a double representing the y-coordinate
-	* 	z: a double representing the z-coordinate
-	*/
-	Position(double x, double y, double z);
-
-	// Constructs a null position
-	Position();
-
-	// Returns the negative Position
-	Position negative();
-
-	// Returns the normalized Position
-	Position normalize();
-
-	// Returns the dot product of the Parent position and Position p
-	double dot(Position p);
-
-	// Returns the magnitude of this position
-	double magn();
-
-	// Returns the cross product of the Parent position and Position p
-	Position cross(Position p);
-
-	// Adds Position p's xyz values to the parent's xyz values.
-	Position operator+(Position p);
-
-	// Adds Position p's xyz values by the value of double i.
-	Position operator+(double i);
-
-	// Subtracts Position p's xyz values from the parent's xyz values.
-	Position operator-(Position p);
-
-	// Multiplies Position p's xyz values to the parent's xyz values.
-	Position operator*(Position p);
-
-	// Multiplies Position p's xyz values by the value of double i.
-	Position operator*(double i);
-
-	// Divides the parent's xyz values with double d
-	Position operator/(double d);
-};
+#include "utils.h"
 
 struct Ray {
 public:
@@ -103,9 +19,7 @@ public:
 	*	start: a scalar representing the t-value where the ray starts
 	*	end: a scalar representing the t-value where the ray ends
 	*/
-	Ray(Position origin, Position direction, double start = 0, double end = std::numeric_limits<double>::infinity());
-	// TODO: make a constructor that creates the normalized position
-	Ray();
+	Ray(Position origin, Position direction, double start = 0, double end = std::numeric_limits<double>::infinity());;
 };
 
 struct Material {
@@ -124,8 +38,7 @@ public:
 	*	km: the color of the mirror coefficient
 	*	ka: the color of the ambient coefficient
 	*/
-	Material(Color kd, Color ks = Color(0), int p = 20, Color km = Color(0), Color ka = Color());
-	Material();
+	Material(Color kd = Color(), Color ks = Color(0), int p = 20, Color km = Color(0), Color ka = Color());
 };
 
 struct Hit {
@@ -142,8 +55,7 @@ public:
 	*	normal: the outward-facing normal vector from the intersection
 	*	material: the material of the surface hit
 	*/
-	Hit(double t, Position point = Position(), Position normal = Position(), Material material = Material());
-	Hit();
+	Hit(double t = NULL, Position point = Position(), Position normal = Position(), Material material = Material());
 };
 
 class Sphere {
@@ -178,7 +90,7 @@ public:
 	double aspect;
 	double vfov;
 	/*
-	* Creates a camera.
+	* Constructs the camera.
 	* Parameters:
 	*	eye: the 3D location of the camera
 	*	target: the 3D point at which the camera is facing
@@ -191,10 +103,10 @@ public:
 	/*
 	* Creates a ray to represent a point in the viewpoint.
 	* Parameters:
-	*	xpt: how far along the x-axis the point is, from 0 to 1.
-	*	ypt: how far along the y-axis the point is, from 0 to 1.
+	*	xpt: how far along the x-axis the point is, from 0 to 1
+	*	ypt: how far along the y-axis the point is, from 0 to 1
 	* Return:
-	*	the Ray that corresponds to this location
+	*	the Ray that corresponds to this location.
 	*/
 	Ray generate_ray(double xpt, double ypt);
 };
@@ -204,7 +116,7 @@ public:
 	Position pos;
 	Color intensity;
 	/*
-	* Constructs a new point light.
+	* Constructs the point light.
 	* Parameters:
 	*	position: the position of the point light
 	*	intensity: the color of the point light's intensity
@@ -215,7 +127,7 @@ public:
 	* Computes the shading due to this light at this ray-object intersection.
 	* Parameters:
 	*	ray: the ray that hit the object
-	*	hit: the data for this ray-object intersection.
+	*	hit: the data for this ray-object intersection
 	* Return:
 	*	the Color representing the shading due to this point light.
 	*/
@@ -226,7 +138,7 @@ class AmbientLight {
 public:
 	Color intensity;
 	/*
-	* Constructs a new ambient light.
+	* Constructs the ambient light.
 	* Parameters:
 	*	intensity: the colored intensity of the ambient light
 	*/
@@ -235,7 +147,7 @@ public:
 	/*
 	* Computes the shading due to this light at this ray-object intersection.
 	* Parameters:
-	*	hit: the data for this ray-object intersection.
+	*	hit: the data for this ray-object intersection
 	* Return:
 	*	the Color representing the shading due to this ambient light.
 	*/
@@ -247,7 +159,7 @@ public:
 	std::vector<Sphere> spheres;
 	Color bgcolor;
 	/*
-	* Constructs a new scene.
+	* Constructs the scene.
 	* Parameters:
 	*	spheres: a vector of all spheres in the scene
 	*	bgcolor: the background color of the scene
@@ -291,7 +203,7 @@ Color shade(Ray ray, Hit hit, Scene scene, std::vector<PointLight> pointlights, 
 * Return:
 *   an RGBA array of size [xres * yres * 4].
 */
-sf::Uint8* render(Camera camera, Scene scene, std::vector<PointLight> pointlights, AmbientLight ambientlight, int xres, int yres);
+sf::Uint8* render(Camera &camera, Scene scene, std::vector<PointLight> pointlights, AmbientLight ambientlight, int xres, int yres);
 
 /*
 * Creates an array of RGBA pixels representing the color magenta.
