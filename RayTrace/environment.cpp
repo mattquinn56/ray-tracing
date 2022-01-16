@@ -32,15 +32,45 @@ AmbientLight ambientlight(Color(.3));
 
 // Construct camera
 Position eye(-3, 2.7, -5);
-Position target(0, 0, 0);
+Position target(0, 1, 0);
 Position up(0, 1, 0);
-Camera camera(eye, target, up, 25);
+Camera camera(eye, target, up, 40);
 
-sf::Uint8* getImg(int xres, int yres) {
-	camera.aspect = (double) xres / yres;
+sf::Uint8* getImg(int xres, int yres, int xeye, int yeye) {
+	camera.eye = Position(xeye, 2.7, yeye);
+	camera.aspect = (double)xres / yres;
 	return render(camera, scene, pointlights, ambientlight, xres, yres);
 }
 
+/*
+sf::Sprite* getAllSprites(int xres, int yres, int iter, double scale) {
+	camera.aspect = (double) xres / yres;
+	Position eye(0, 0, 0);
+	sf::Uint8* px;
+	sf::Image image;
+	sf::Texture texture;
+	sf::Sprite sprite;
+	sf::Sprite* allSprites = new sf::Sprite[iter];
+	for (int t = 0; t < iter; ++t) {
+		printf("%i\n", t);
+		// Find parametric coordinates
+		eye.x = 5 * cos(t);
+		eye.y = 2.7;
+		eye.z = 5 * sin(t);
+
+		// Grab image
+		px = getImg(xres, yres, eye);
+
+		// Add this to the spritelist
+		image.create(xres, yres, px);
+		texture.loadFromImage(image);
+		sprite.setTexture(texture);
+		sprite.setScale(scale, scale);
+		allSprites[t] = sprite;
+	}
+	return allSprites;
+}
+*/
 /*
 // Secondary (Allison) example
 // Construct materials

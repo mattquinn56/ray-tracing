@@ -5,26 +5,37 @@
 int main() {
 
     // Resolution of image, and scale. Window size is resolution * scale.
-    const int xres = 2000;
-    const int yres = 1125;
-    const int scale = 1;
+    const int xres = 256;
+    const int yres = 144;
+    const int scale = 3;
 
+    // Get array of sptires
+    int iter = 720;
 
-    // Get array of pixels based on what is selected
-    sf::Uint8* px = getImg(xres, yres);
+    //sf::Sprite* sprites = getAllSprites(xres, yres, iter, scale);
+    double xeye;
+    double yeye;
+    sf::Image* allImages = new sf::Image[iter];
+    sf::Texture* allTexts = new sf::Texture[iter];
+    sf::Sprite* allSprites = new sf::Sprite[iter];
+    for (int t = 0; t < iter; ++t) {
 
-    // Turn array of pixels into sprite
-    sf::Image image;
-    sf::Texture texture;
-    sf::Sprite sprite;
-    image.create(xres, yres, px);
-    delete[] px;
-    texture.loadFromImage(image);
-    sprite.setTexture(texture);
-    sprite.setScale(scale, scale);
+        // Find parametric coordinates
+        xeye = 5 * cos(0.0174533 * t);
+        yeye = 5 * sin(0.0174533 * t);
+        printf("%i: (%f, %f)\n", t, xeye, yeye);
+
+        // Grab image, add this to the spritelist
+        allImages[t].create(xres, yres, getImg(xres, yres, xeye, yeye));
+        allTexts[t].loadFromImage(allImages[t]);
+        allSprites[t].setTexture(allTexts[t]);
+        allSprites[t].setScale(scale, scale);
+    }
 
     // Window handling
     sf::RenderWindow window(sf::VideoMode(xres * scale, yres * scale), "Ray tracing!");
+    window.setFramerateLimit(120);
+    int i = 0;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -33,8 +44,12 @@ int main() {
         }
 
         window.clear();
-        window.draw(sprite);
+        window.draw(allSprites[i]);
         window.display();
+        i++;
+        if (i == iter) {
+            i = 0;
+        }
     }
 
     return 0;
