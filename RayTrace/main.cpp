@@ -9,11 +9,12 @@ int main() {
     printf("Select the scene to render.\n");
     printf("1) Shiny Marbles\n");
     printf("2) Orange vs Blue\n");
-    printf("3) Snowman\n>>> ");
+    printf("3) Criss-Cross Rainbow\n");
+    printf("4) Snowman\n>>> ");
     int sel;
     std::cin >> sel;
-    while (!std::cin || sel < 1 || sel > 3) {
-        printf("Input must be an integer from 1 to 3.\n>>> ");
+    while (!std::cin || sel < 1 || sel > 4) {
+        printf("Input must be an integer from 1 to 4.\n>>> ");
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin >> sel;

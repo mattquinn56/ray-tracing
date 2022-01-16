@@ -82,6 +82,33 @@ public:
 	Hit intersect(Ray ray);
 };
 
+class Triangle {
+public:
+	Position v1;
+	Position v2;
+	Position v3;
+	Material material;
+	/*
+	* Constructs the triangle.
+	* Parameters:
+	*	v1, v2, v3: the position of each vertex
+	*	material: the material of the triangle
+	* Note: the vertices of the triangle should be given in clockwise
+	* order if looked at from the face where the normal should protrude.
+	* This is to ensure the normal vector goes in the right direction.
+	*/
+	Triangle(Position v1, Position v2, Position v3, Material material);
+
+	/*
+	* Computes the first intersection between a ray and this triangle.
+	* Parameters:
+	*	ray: the ray used for intersection
+	* Return:
+	*	the Hit for this ray-object intersection.
+	*/
+	Hit intersect(Ray ray);
+};
+
 class Camera {
 public:
 	Position eye;
@@ -157,14 +184,16 @@ public:
 class Scene {
 public:
 	std::vector<Sphere> spheres;
+	std::vector<Triangle> tris;
 	Color bgcolor;
 	/*
 	* Constructs the scene.
 	* Parameters:
 	*	spheres: a vector of all spheres in the scene
+	*	tris: a vector of all triangles in the scene
 	*	bgcolor: the background color of the scene
 	*/
-	Scene(std::vector<Sphere> spheres, Color bgcolor);
+	Scene(std::vector<Sphere> spheres, std::vector<Triangle> tris, Color bgcolor);
 
 	/*
 	* Computes the first intersection between a ray and an object in the scene.

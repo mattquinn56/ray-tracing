@@ -2,28 +2,30 @@
 
 sf::Uint8* getImg(int xres, int yres, int sel) {
 	if (sel == 1) {
-		// Shiny Marbles
+		// Shiny Marbles example
 
 		// Construct materials
+		Material graymat(Color(.2), Color(.6), 20, Color(.4));
 		Material tanmat(Color(.7, .7, .4), Color(.6), 20, Color(.4));
-		Material graymat(Color(.2, .2, .2), Color(.6), 20, Color(.4));
 		Material redmat(Color(.9, .1, .1), Color(.6), 20, Color(.4));
 		Material greenmat(Color(.2, .9, .4), Color(.6), 20, Color(.4));
 
+		// Construct ground
+		Position p0(0, -40, 0);
+		Sphere ground(p0, 39.5, graymat);
+
 		// Construct spheres
 		Position p1(0, 0, 0);
-		Position p2(0, -40, 0);
-		Position p3(1.5, 0, -.5);
-		Position p4(-.75, 0, 1.75);
+		Position p2(1.5, 0, -.5);
+		Position p3(-.75, 0, 1.75);
 		Sphere tansphere(p1, .5, tanmat);
-		Sphere graysphere(p2, 39.5, graymat);
-		Sphere redsphere(p3, .5, redmat);
-		Sphere greensphere(p4, .5, greenmat);
+		Sphere redsphere(p2, .5, redmat);
+		Sphere greensphere(p3, .5, greenmat);
 
 		// Construct scene
-		std::vector<Sphere> spherelst = { tansphere, graysphere, redsphere, greensphere };
+		std::vector<Sphere> spherelst = { ground, tansphere, redsphere, greensphere };
 		Color bgcolor(.2, .3, .5);
-		Scene scene(spherelst, bgcolor);
+		Scene scene(spherelst, {}, bgcolor);
 
 		// Construct lights
 		Color superbright(255);
@@ -40,28 +42,95 @@ sf::Uint8* getImg(int xres, int yres, int sel) {
 		return render(camera, scene, pointlights, ambientlight, xres, yres);
 	}
 	else if (sel == 2) {
-		// Orange vs Blue
+		// Orange vs Blue example
 
 		// Construct materials
-		Material tanmat(Color(.7, .7, .4), Color(.6), 20, Color(.4));
-		Material graymat(Color(.2, .2, .2), Color(.6), 20, Color(.4));
-		Material redmat(Color(.9, .1, .1), Color(.6), 20, Color(.4));
-		Material greenmat(Color(.2, .9, .4), Color(.6), 20, Color(.4));
+		Material graymat(Color(.5), Color(.6), 20, Color(.3));
+		Material supershiny(Color(.8), Color(.6), 20, Color(.5));
+
+		// Construct ground
+		Position v1(10, 0, 15);
+		Position v2(10, 0, -15);
+		Position v3(-10, 0, 15);
+		Position v4(-10, 0, -15);
+		Triangle ground1(v1, v2, v3, graymat);
+		Triangle ground2(v3, v2, v4, graymat);
 
 		// Construct spheres
-		Position p1(0, 0, 0);
-		Position p2(0, -40, 0);
-		Position p3(1.5, 0, -.5);
-		Position p4(-.75, 0, 1.75);
-		Sphere tansphere(p1, .5, tanmat);
-		Sphere graysphere(p2, 39.5, graymat);
-		Sphere redsphere(p3, .5, redmat);
-		Sphere greensphere(p4, .5, greenmat);
+		Position p1(0, .6, 2);
+		Position p2(0, .6, -2);
+		Sphere sphere1(p1, .6, supershiny);
+		Sphere sphere2(p2, .6, supershiny);
 
 		// Construct scene
-		std::vector<Sphere> spherelst = { tansphere, graysphere, redsphere, greensphere };
+		std::vector<Sphere> spherelst = { sphere1, sphere2 };
+		std::vector<Triangle> trilist = { ground1, ground2 };
 		Color bgcolor(.2, .3, .5);
-		Scene scene(spherelst, bgcolor);
+		Scene scene(spherelst, trilist, bgcolor);
+
+		// Construct lights
+		Color org(255, 165, 0);
+		Color blu(0, 0, 255);
+		PointLight pointlight1(Position(0, .6, 15), org);
+		PointLight pointlight2(Position(0, .6, -15), blu);
+		std::vector<PointLight> pointlights = { pointlight1, pointlight2 };
+		AmbientLight ambientlight(Color(0));
+
+		// Construct camera
+		Position eye(8, 5.6, 0);
+		Position target(0, .6, 0);
+		Position up(0, 1, 0);
+		Camera camera(eye, target, up, 35, (double)xres / yres);
+
+		return render(camera, scene, pointlights, ambientlight, xres, yres);
+	}
+	else if (sel == 3) {
+		// Criss-Cross Rainbow example
+
+		// Define constants
+		double onesixth = 1.0472; // 1/6th of a rotation, in radians
+		double r = 2;
+
+		// Construct colors
+		Color red(1, 0, 0);
+		Color orange(1, .5, 0);
+		Color yellow(1, 1, 0);
+		Color green(0, 1, 0);
+		Color blue(0, 0, 1);
+		Color indigo(.5, 0, 1);
+		Color purple(1, 0, 1);
+
+		// Construct materials
+		Material graymat(Color(.5), Color(.6), 20, Color(.3));
+		Material supershiny(Color(.8), Color(.6), 20, Color(.5));
+
+		// Construct ground
+		Position v1(10, 0, 15);
+		Position v2(10, 0, -15);
+		Position v3(-10, 0, 15);
+		Position v4(-10, 0, -15);
+		Triangle ground1(v1, v2, v3, graymat);
+		Triangle ground2(v3, v2, v4, graymat);
+
+		// Construct spheres
+		Position p1(r * cos(onesixth), .6, r * sin(onesixth));
+		Position p2(r * cos(2*onesixth), .6, r * sin(2 * onesixth));
+		Position p3(r * cos(3*onesixth), .6, r * sin(3 * onesixth));
+		Position p4(r * cos(4*onesixth), .6, r * sin(4 * onesixth));
+		Position p5(r * cos(5*onesixth), .6, r * sin(5 * onesixth));
+		Position p6(r * cos(6*onesixth), .6, r * sin(6 * onesixth));
+		Sphere s1(p1, .6, supershiny);
+		Sphere s2(p2, .6, supershiny);
+		Sphere s3(p3, .6, supershiny);
+		Sphere s4(p4, .6, supershiny);
+		Sphere s5(p5, .6, supershiny);
+		Sphere s6(p6, .6, supershiny);
+
+		// Construct scene
+		std::vector<Sphere> spherelst = { s1, s2, s3, s4, s5, s6 };
+		std::vector<Triangle> trilist = { ground1, ground2 };
+		Color bgcolor(.2, .3, .5);
+		Scene scene(spherelst, trilist, bgcolor);
 
 		// Construct lights
 		Color superbright(255);
@@ -70,14 +139,14 @@ sf::Uint8* getImg(int xres, int yres, int sel) {
 		AmbientLight ambientlight(Color(.3));
 
 		// Construct camera
-		Position eye(-3, 2.7, -5);
-		Position target(0, 0, 0);
+		Position eye(8, 5.6, 0);
+		Position target(0, .6, 0);
 		Position up(0, 1, 0);
-		Camera camera(eye, target, up, 25, (double)xres / yres);
+		Camera camera(eye, target, up, 35, (double)xres / yres);
 
 		return render(camera, scene, pointlights, ambientlight, xres, yres);
 	}
-	else if (sel == 3) {
+	else {
 		// Snowman example
 
 		// Construct materials
@@ -97,7 +166,7 @@ sf::Uint8* getImg(int xres, int yres, int sel) {
 		// Construct scene
 		std::vector<Sphere> spherelst = { ground, ball1, ball2, ball3, eye1, eye2 };
 		Color bgcolor(.4, .6, 1);
-		Scene scene(spherelst, bgcolor);
+		Scene scene(spherelst, {}, bgcolor);
 
 		// Construct lights
 		Color superbright(188, 188, 255);

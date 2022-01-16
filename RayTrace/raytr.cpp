@@ -73,6 +73,47 @@ Hit Sphere::intersect(Ray ray) {
     }
 }
 
+// Triangle functions
+Triangle::Triangle(Position v1, Position v2, Position v3, Material material) {
+    this->v1 = v1;
+    this->v2 = v2;
+    this->v3 = v3;
+    this->material = material;
+}
+Hit Triangle::intersect(Ray ray) {
+
+    Position abc = v1 - v2;
+    Position def = v1 - v3;
+    Position ghi = ray.direction;
+    Position jkl = v1 - ray.origin;
+    double ei_hf = (def.y * ghi.z) - (ghi.y * def.z);
+    double gf_di = (ghi.x * def.z) - (def.x * ghi.z);
+    double dh_eg = (def.x * ghi.y) - (def.y * ghi.x);
+    double ak_jb = (abc.x * jkl.y) - (jkl.x * abc.y);
+    double jc_al = (jkl.x * abc.z) - (abc.x * jkl.z);
+    double bl_kc = (abc.y * jkl.z) - (jkl.y * abc.z);
+
+    // Finding constants
+    double M = (abc.x * ei_hf) + (abc.y * gf_di) + (abc.z * dh_eg);
+    double beta = ((jkl.x * ei_hf) + (jkl.y * gf_di) + (jkl.z * dh_eg)) / M;
+    double gamma = ((ghi.z * ak_jb) + (ghi.y * jc_al) + (ghi.x * bl_kc)) / M;
+    double t = -1 * ((def.z * ak_jb) + (def.y * jc_al) + (def.x * bl_kc)) / M;
+
+    // Checking base cases
+    if (t < ray.start || t > ray.end) {
+        return Hit(inf);
+    }
+    else if (gamma < 0 || gamma > 1) {
+        return Hit(inf);
+    }
+    else if (beta < 0 || beta > 1 - gamma) {
+        return Hit(inf);
+    }
+    Position point = ray.origin + (ray.direction * t);
+    Position normal = abc.cross(def).normalize();
+    return Hit(t, point, normal, this->material);
+}
+
 // Camera functions
 Camera::Camera(Position eye, Position target, Position up, double vfov, double aspect) {
     this->eye = eye;
@@ -129,8 +170,9 @@ Color AmbientLight::illuminate(Hit hit) {
 }
 
 // Scene functions
-Scene::Scene(std::vector<Sphere> spheres, Color bgcolor) {
+Scene::Scene(std::vector<Sphere> spheres, std::vector<Triangle> tris, Color bgcolor) {
     this->spheres = spheres;
+    this->tris = tris;
     this->bgcolor = bgcolor;
 }
 Hit Scene::intersect(Ray ray) {
@@ -138,6 +180,9 @@ Hit Scene::intersect(Ray ray) {
     std::vector<Hit> hitlist = {};
     for (Sphere sph : this->spheres) {
         hitlist.push_back(sph.intersect(ray));
+    }
+    for (Triangle tri : this->tris) {
+        hitlist.push_back(tri.intersect(ray));
     }
     // Within this list, return the hit with the smallelst t
     double min_t = inf;
