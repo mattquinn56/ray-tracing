@@ -205,14 +205,4 @@ Color shade(Ray ray, Hit hit, Scene scene, std::vector<PointLight> pointlights, 
 */
 sf::Uint8* render(Camera &camera, Scene scene, std::vector<PointLight> pointlights, AmbientLight ambientlight, int xres, int yres);
 
-/*
-* Creates an array of RGBA pixels representing the color magenta.
-* Parameters:
-*   xres: the number of pixels in the x-dimension
-*   yres: the number of pixels in the y-dimension
-* Return:
-*   an RGBA array of size [xres * yres * 4].
-*/
-sf::Uint8* testImg(int xres, int yres);
-
 #endif

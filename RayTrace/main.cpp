@@ -1,52 +1,17 @@
 // Matthew Quinn
-#include <iostream>
-#include <time.h>
+#include <stdio.h>
 #include "environment.h"
 
 int main() {
-    // Select which scene to view. 0 is debug, 1 is run, 2 is benchmark
-    int selectscene = 2;
-    // Select whether to use clock. 0 is no, 1 is yes
-    int useclk = 1;
-    // If benchmark is selected, this is how many times to run it
-    int num = 3;
 
-    
     // Resolution of image, and scale. Window size is resolution * scale.
-    const int xres = 800;
-    const int yres = 450;
-    const int scale = 2;
+    const int xres = 2000;
+    const int yres = 1125;
+    const int scale = 1;
 
-    // Start clock
-    clock_t t;
-    if (useclk && selectscene != 2) {
-        t = clock();
-    }
 
     // Get array of pixels based on what is selected
-    sf::Uint8* px;
-    if (selectscene == 0) {
-        px = testImg(xres, yres);
-    }
-    else if (selectscene == 1) {
-        px = getImg(xres, yres);
-    }
-    else {
-        px = testImg(xres, yres);
-        float acc = 0;
-        for (int i = 0; i < num; ++i) {
-            t = clock();
-            px = getImg(xres, yres);
-            acc += (float)(clock() - t) / CLOCKS_PER_SEC;
-            std::cout << ((float) (clock() - t)) / CLOCKS_PER_SEC << std::endl;
-        }
-        std::cout << "Average: " << acc / num << std::endl;
-    }
-
-    if (useclk && selectscene != 2) {
-        t = clock() - t;
-        std::cout << ((float)t) / CLOCKS_PER_SEC << std::endl;
-    }
+    sf::Uint8* px = getImg(xres, yres);
 
     // Turn array of pixels into sprite
     sf::Image image;
@@ -74,3 +39,10 @@ int main() {
 
     return 0;
 }
+
+/*
+// Start clock
+clock_t t = clock();
+// Finish clock
+printf("%f", ((float)(clock() - t)) / CLOCKS_PER_SEC);
+*/

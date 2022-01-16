@@ -2,8 +2,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <armadillo>
-
 struct Color {
 public:
 	double r;

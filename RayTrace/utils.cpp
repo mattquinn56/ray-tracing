@@ -1,4 +1,5 @@
-#include <iostream>
+#include <cmath>
+#include <stdio.h>
 #include "utils.h"
 
 // Color functions
@@ -79,8 +80,8 @@ Position Position::operator/(double d) {
 }
 
 void print(Position p) {
-    std::cout << "(" << p.x << ", " << p.y << ", " << p.z << ")" << std::endl;
+    printf("(%f, %f, %f)", p.x, p.y, p.z);
 }
 void print(Color c) {
-    std::cout << "(" << c.r << ", " << c.g << ", " << c.b << ")" << std::endl;
+    printf("(%f, %f, %f)", c.r, c.g, c.b);
 }

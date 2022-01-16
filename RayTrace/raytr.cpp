@@ -193,7 +193,6 @@ sf::Uint8* render(Camera &camera, Scene scene, std::vector<PointLight> pointligh
         for (int i = 0; i < xres; ++i) {
             ind = (4 * j * xres) + (4 * i);
             Ray ray = camera.generate_ray((i + .5) / xres, (abs(j - yres) + .5) / yres);
-            //Ray ray = camera.generate_ray((i + .5) / xres, (j + .5) / yres);
             Hit hit = scene.intersect(ray);
             Color color = shade(ray, hit, scene, pointlights, ambientlight);
             pixels[ind] = color.r > 1 ? 255 : color.r * 255;
@@ -203,19 +202,4 @@ sf::Uint8* render(Camera &camera, Scene scene, std::vector<PointLight> pointligh
         }
     }
     return pixels;
-}
-
-// Debug functions
-sf::Uint8* testImg(int xres, int yres) {
-    sf::Uint8* px = new sf::Uint8[xres * yres * 4];
-    for (int i = 0; i < xres; ++i) {
-        for (int j = 0; j < yres; ++j) {
-            int ind = (4 * j * xres) + (4 * i);
-            px[ind] = 190;
-            px[ind + 1] = 40;
-            px[ind + 2] = 160;
-            px[ind + 3] = 255;
-        }
-    }
-    return px;
 }
