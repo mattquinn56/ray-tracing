@@ -83,8 +83,11 @@ public:
 	Position operator/(double d);
 };
 
-void print(Position p);
+// Prints the color in (r, g, b) format
 void print(Color c);
+
+// Prints the position in (x, y, z) format
+void print(Position p);
 
 
 #endif

@@ -1,17 +1,90 @@
 // Matthew Quinn
 #include <stdio.h>
+#include <iostream>
 #include "environment.h"
 
 int main() {
 
-    // Resolution of image, and scale. Window size is resolution * scale.
-    const int xres = 2000;
-    const int yres = 1125;
-    const int scale = 1;
+    // Selecting scene
+    printf("Select the scene to render.\n");
+    printf("1) Shiny Marbles\n");
+    printf("2) Orange vs Blue\n");
+    printf("3) Snowman\n>>> ");
+    int sel;
+    std::cin >> sel;
+    while (!std::cin || sel < 1 || sel > 3) {
+        printf("Input must be an integer from 1 to 3.\n>>> ");
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin >> sel;
+    }
 
+    // Selecting resolution
+    printf("Select the resolution.\n");
+    printf("1) 256 x 144\n");
+    printf("2) 1280 x 720\n");
+    printf("3) 1920 x 1080\n");
+    printf("4) Custom\n>>> ");
+    int inp1;
+    std::cin >> inp1;
+    while(!std::cin || inp1 < 1 || inp1 > 4) {
+        printf("Input must be an integer from 1 to 4.\n>>> ");
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin >> inp1;
+    }
+
+    // Handling resolution
+    int xres;
+    int yres;
+    switch (inp1) {
+    case 1:
+        xres = 256;
+        yres = 144;
+        break;
+    case 2:
+        xres = 1280;
+        yres = 720;
+        break;
+    case 3:
+        xres = 1920;
+        yres = 1080;
+        break;
+    case 4:
+        printf("Enter the x dimension.\n>>> ");
+        std::cin >> xres;
+        while (!std::cin || xres < 1 || xres > 10000) {
+            printf("X dimension must be an integer from 1 to 10000.\n>>> ");
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin >> xres;
+        }
+        printf("Enter the y dimension.\n>>> ");
+        std::cin >> yres;
+        while (!std::cin || yres < 1 || yres > 10000) {
+            printf("Y dimension must be an integer from 1 to 10000.\n>>> ");
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin >> yres;
+        }
+        break;
+    }
+
+    // Selecting scale
+    float scale;
+    printf("Enter the scale.\n");
+    printf("For example, a 256x144 resolution with a scale of 2 would create a 512x288 window.\n>>> ");
+    std::cin >> scale;
+    while (!std::cin || scale < 1 || scale > 100) {
+        printf("Scale must be a number from 1 to 100.\n>>> ");
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin >> scale;
+    }
 
     // Get array of pixels based on what is selected
-    sf::Uint8* px = getImg(xres, yres);
+    printf("Computing...\n");
+    sf::Uint8* px = getImg(xres, yres, sel);
 
     // Turn array of pixels into sprite
     sf::Image image;
