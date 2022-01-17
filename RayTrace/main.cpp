@@ -10,11 +10,12 @@ int main() {
     printf("1) Shiny Marbles\n");
     printf("2) Orange vs Blue\n");
     printf("3) Criss-Cross Rainbow\n");
-    printf("4) Snowman\n>>> ");
+    printf("4) Snowman\n");
+    printf("5) Pyramid\n>>> ");
     int sel;
     std::cin >> sel;
-    while (!std::cin || sel < 1 || sel > 4) {
-        printf("Input must be an integer from 1 to 4.\n>>> ");
+    while (!std::cin || sel < 1 || sel > 5) {
+        printf("Input must be an integer from 1 to 5.\n>>> ");
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin >> sel;
@@ -23,13 +24,14 @@ int main() {
     // Selecting resolution
     printf("Select the resolution.\n");
     printf("1) 256 x 144\n");
-    printf("2) 1280 x 720\n");
-    printf("3) 1920 x 1080\n");
-    printf("4) Custom\n>>> ");
+    printf("2) 800 x 450\n");
+    printf("3) 1280 x 720\n");
+    printf("4) 1920 x 1080\n");
+    printf("5) Custom\n>>> ");
     int inp1;
     std::cin >> inp1;
-    while(!std::cin || inp1 < 1 || inp1 > 4) {
-        printf("Input must be an integer from 1 to 4.\n>>> ");
+    while(!std::cin || inp1 < 1 || inp1 > 5) {
+        printf("Input must be an integer from 1 to 5.\n>>> ");
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin >> inp1;
@@ -44,14 +46,18 @@ int main() {
         yres = 144;
         break;
     case 2:
+        xres = 800;
+        yres = 450;
+        break;
+    case 3:
         xres = 1280;
         yres = 720;
         break;
-    case 3:
+    case 4:
         xres = 1920;
         yres = 1080;
         break;
-    case 4:
+    case 5:
         printf("Enter the x dimension.\n>>> ");
         std::cin >> xres;
         while (!std::cin || xres < 1 || xres > 10000) {
@@ -74,7 +80,7 @@ int main() {
     // Selecting scale
     float scale;
     printf("Enter the scale.\n");
-    printf("For example, a 256x144 resolution with a scale of 2 would create a 512x288 window.\n>>> ");
+    printf("For example, a 256x144 resolution with a scale of 2 would be shown in a 512x288 window.\n>>> ");
     std::cin >> scale;
     while (!std::cin || scale < 1 || scale > 100) {
         printf("Scale must be a number from 1 to 100.\n>>> ");
