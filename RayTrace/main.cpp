@@ -1,6 +1,6 @@
-/*	Author: Matthew Quinn
+/*  Author: Matthew Quinn
 *   January 2022
-*	Based on CS 4620 Assignment 4 by Abe Davis
+*   Based on CS 4620 Assignment 4 by Abe Davis
 */
 #include <stdio.h>
 #include <iostream>
